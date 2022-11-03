@@ -5,4 +5,32 @@ describe("deterministicPartitionKey", () => {
     const trivialKey = deterministicPartitionKey();
     expect(trivialKey).toBe("0");
   });
+
+  it("Returns a stringified partition key if its an object", () => {
+    const object = {
+      partitionKey: { value: 1 },
+    };
+    const trivialKey = deterministicPartitionKey(object);
+
+    expect(trivialKey).toEqual(JSON.stringify(object.partitionKey));
+  });
+
+  it("Returns the partition key if its string", () => {
+    const object = {
+      partitionKey: "sample key",
+    };
+    const trivialKey = deterministicPartitionKey(object);
+    expect(trivialKey).toEqual(object.partitionKey);
+  });
+
+  it("Returns the same key given the same input", () => {
+    const object = {
+      value: "sample object",
+    };
+    const firstKey = deterministicPartitionKey(object);
+
+    const secondKey = deterministicPartitionKey(object);
+
+    expect(firstKey).toEqual(secondKey);
+  });
 });
